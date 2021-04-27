@@ -112,31 +112,28 @@ void Organize_Events(std::vector<Event> &Es,std::vector<MainTask> &MTs){
 
 int main(){
 
-    //dummy objects
+    //Dummy objects used to fill the vector with the objects from the database
     MainTask mt;
     SubTask st;
     Event e;
 
-    bool executing{true};
+    // Flag to know if new agend needs to be created.
     bool new_agenda{false};
-    /*std::vector<std::string> Options = {"Hello","World","How","Are","You?"};
 
-    Menu(Options);*/
-
+    //This function returns the name of the agenda to run over.
     std::string db = Select_Agenda(new_agenda);
-    std::cout<<db<<std::endl;
-    if(new_agenda){
+    if(new_agenda){ //Create new agenda.
         std::cout<<"Creating new agenda named "<<db<<std::endl;
         CreateDB(db);
-    }else{
+    }else{ //Opem existing agenda.
         std::cout<<"Selecting agenda named "<<db<<std::endl;
     }
 
-
+    // Fill vectors of objects.
     std::vector<Event> Es=e.Fill(Es,db);
     std::vector<MainTask> MTs=mt.Fill(MTs,db);
     std::vector<SubTask> STs=st.Fill(STs,db);
-
+    //Organize hierarchy of the agenda.
     Organize_Tasks(MTs,STs);
     Organize_Events(Es,MTs);
 
