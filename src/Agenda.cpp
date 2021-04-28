@@ -5,6 +5,7 @@
 #include"Task.hpp"
 #include"Event.hpp"
 #include"DataBase.hpp"
+#include"Menus.hpp"
 
 
 namespace fs=std::filesystem;
@@ -66,29 +67,10 @@ std::string Select_Agenda(bool& new_agenda){
     }
 }
 
-int Menu(std::vector<std::string> options){
-    int aux_int{0};
-    for(auto opt : options){
-        aux_int++;
-        std::cout<<aux_int<<"  ";
-        std::cout<<opt<<std::endl;
-    }
-    int selected{};
-    std::cout<<"Select an option:"<<std::endl;
-    std::cin>>selected;
-    while(std::cin.fail() || selected>aux_int){
-        std::cin.clear();
-        std::cin.ignore(1000,'\n');
-        std::cout<<"Enter a valid option"<<std::endl;
-        std::cin>>selected;
-    }
-    return selected;
-}
-
 void Organize_Tasks(std::vector<MainTask> &MTs,std::vector<SubTask> &STs){
     for(auto& p : MTs){
         for(auto& q : STs){
-            if(q.Get_ID()==p.Get_ID()){
+            if(q.Get_T_ID()==p.Get_ID()){
                 p.Add_SubTask(&q);
             }
         }
@@ -107,8 +89,14 @@ void Organize_Events(std::vector<Event> &Es,std::vector<MainTask> &MTs){
 
 
 
+//Defintion of static variables containing objects IDs.
+std::vector<int> Event::Event_IDs;
+std::vector<int> MainTask::MainTask_IDs;
+std::vector<int> SubTask::SubTask_IDs;
 
-
+std::vector<Event> Menu::All_E;
+std::vector<MainTask> Menu::All_MT;
+std::vector<SubTask> Menu::All_ST;
 
 int main(){
 
@@ -137,54 +125,46 @@ int main(){
     Organize_Tasks(MTs,STs);
     Organize_Events(Es,MTs);
 
-    for(auto& i : Es){
-        std::cout<<i<<std::endl;
+    Menu::All_E=Es;
+    Menu::All_MT=MTs;
+    Menu::All_ST=STs;
+
+    std::vector<Menu*> Menus;
+
+    Menu_1 m1;
+    Menu_2 m2;
+
+    Menus.push_back(&m1);
+    Menus.push_back(&m2);
+
+    m1.Execute(Menus);
+
+
+    if(new_agenda){
+        Event e1("19 of April","Take my flights");
+        Event e2("20 of April","Apple event");
+
+        MainTask task1("9 of April","Order food.");
+        MainTask task2("10 of April","Make Love!.");
+        SubTask sub_task1("11 April.","Take my flight.");
+        SubTask sub_task2("12 April.","Make my bed.");
+        SubTask sub_task3("13 April.","Eat my steak.");
+
+        e1.Add_Task(&task1);
+        e2.Add_Task(&task2);
+
+        task1.Add_SubTask(&sub_task1);
+        task1.Add_SubTask(&sub_task2);
+        task2.Add_SubTask(&sub_task3);
+
+        Execute_Query(e1.Generate_SQL_Query(),db);
+        Execute_Query(e2.Generate_SQL_Query(),db);
+        Execute_Query(task1.Generate_SQL_Query(),db);
+        Execute_Query(task2.Generate_SQL_Query(),db);
+        Execute_Query(sub_task1.Generate_SQL_Query(),db);
+        Execute_Query(sub_task2.Generate_SQL_Query(),db);
+        Execute_Query(sub_task3.Generate_SQL_Query(),db);
     }
-
-    /*for(auto& i : MTs){
-        std::cout<<i<<std::endl;
-    }*/
-
-
-    /*CreateDB(db);
-
-    Event e1("19 of April","Take my flights",10);
-    Event e2("20 of April","Apple event",9);
-
-    MainTask task1("9 of April","Order food.",1,10);
-    MainTask task2("10 of April","Make Love!.",2,9);
-    SubTask sub_task1("11 April.","Take my flight.",1,1);
-    SubTask sub_task2("12 April.","Make my bed.",1,2);
-    SubTask sub_task3("13 April.","Eat my steak.",2,3);
-
-
-    Execute_Query(e1.Generate_SQL_Query(),db);
-    Execute_Query(e2.Generate_SQL_Query(),db);
-    Execute_Query(task1.Generate_SQL_Query(),db);
-    Execute_Query(task2.Generate_SQL_Query(),db);
-    Execute_Query(sub_task1.Generate_SQL_Query(),db);
-    Execute_Query(sub_task2.Generate_SQL_Query(),db);
-    Execute_Query(sub_task3.Generate_SQL_Query(),db);*/
-
-
-    //Event Test_Event{"13 of April","Hello world"};
-
-    /*task2.Add_SubTask(&sub_task);
-
-    Test_Event.Add_Task(&task1);
-    Test_Event.Add_Task(&task2);
-
-    std::cout<<Test_Event<<std::endl;
-
-    task1.Complete();
-    task2.Tick();
-
-    std::cout<<Test_Event<<std::endl;
-
-    task2.Tick();
-
-    std::cout<<Test_Event<<std::endl;*/
-
 
     return 0;
 }

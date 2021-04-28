@@ -8,9 +8,10 @@ void Event::Add_Task(MainTask* task){
 }
 
 std::ostream & operator<<(std::ostream &os, const Event &event){
-    os<<"----> Event "<<std::endl<<"Date: "<<event.Date<<std::endl<<"Comment: "<<event.Comment<<std::endl<<std::endl;
+    os<<"-----------------> Event"<<" [ID:"<<event.Event_ID<<"] <----------------------" <<std::endl<<std::endl<<"Date: "<<event.Date<<std::endl<<"Comment: "<<event.Comment<<std::endl<<std::endl;
     if (event.Tasks.empty()){os<<"No tasks!"<<std::endl;}
     else {
+        std::cout<<"Tasks:"<<std::endl;
         for (auto it = event.Tasks.begin()   ; it != event.Tasks.end(); it++){
             (*it)->print(**it);
         }
@@ -31,7 +32,7 @@ std::vector<Event> Event::Fill(std::vector<Event> &E,std::string database){
     if (sqlite3_open(const_cast<char*>(database.c_str()), &db)!=SQLITE_OK) {
         std::cerr << "Could not open database.\n";
     }
-    std::cout<<"HELLO"<<std::endl;
+
     std::vector<std::vector<std::string>> records = select_stmt(const_cast<char*>(query.c_str()),db);
     sqlite3_close(db);
 

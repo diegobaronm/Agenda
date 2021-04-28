@@ -1,7 +1,6 @@
-#include<vector>
-#include<string>
-#include<iostream>
+#include"Menus.hpp"
 
+//Function that stores the selection given by the user.
 int HelperMenu(std::vector<std::string> options){
     int aux_int{0};
     for(auto opt : options){
@@ -21,67 +20,32 @@ int HelperMenu(std::vector<std::string> options){
     return selected;
 }
 
-class Menu{
-    protected:
-    std::vector<std::string> options;
-    int selection{-1};
-    int Menu_id{-1};
+//Functionalities of the Menus in the program
 
-    public :
-    Menu()=default;
-    Menu(std::vector<std::string> opt) : options{opt}{}
-    //~Menu();
-    virtual void Execute(std::vector<Menu*> vec_menus)=0;
-    virtual void Deploy()=0;
-    int Get_Selection(){return selection;}
-};
-
-class Menu_1 : public Menu {
-    public:
-    Menu_1(){
-        Menu_id=1;
-        options={"Say Hello","Menu 2","Say Bye","Go Back"};
+//Menu 1
+void Menu_1::Execute(std::vector<Menu*> vec_menus){
+    int selected=selection;
+    if(selected==-1){this->Deploy();}
+    if(selected==1){
+        std::cout<<"Showing full agenda: "<<std::endl;selection=-1;
+        for(auto& i : Menu::All_E){
+            std::cout<<i<<std::endl;
+        }
     }
-    void Deploy(){selection=HelperMenu(options);}
-    void Execute(std::vector<Menu*> vec_menus){
-        int selected=selection;
-        if(selected==-1){this->Deploy();}
-        if(selected==1){std::cout<<"Say Hello"<<std::endl;selection=-1;}
-        if(selected==2){vec_menus.at(1)->Execute(vec_menus);}
-        if(selected==3){std::cout<<"Say Bye"<<std::endl;selection=-1;}
-        this->Execute(vec_menus);
+    if(selected==2){
+
+        vec_menus.at(1)->Execute(vec_menus);
+
     }
+    if(selected==3){std::cout<<"Say Bye"<<std::endl;selection=-1;}
+    this->Execute(vec_menus);
+}
 
-
-};
-
-class Menu_2 : public Menu {
-    public:
-    Menu_2(){
-        Menu_id=2;
-        options={"Say Hello","Say Bye","Go Back"};
-    }
-    void Deploy(){selection=HelperMenu(options);}
-    void Execute(std::vector<Menu*> vec_menus){
-        int selected=selection;
-        if(selected==-1){this->Deploy();}
-        if(selected==1){std::cout<<"Say Hello"<<std::endl;selection=-1;}
-        if(selected==2){std::cout<<"Say Bye"<<std::endl;selection=-1;}
-        this->Execute(vec_menus);
-    }
-
-
-};
-
-
-/*int main(){
-
-    Menu_1 m1;
-    Menu_2 m2;
-
-    std::vector<Menu*> menus{&m1,&m2};
-
-    m1.Execute(menus);
-
-    return 0;
-}*/
+//Menu 1
+void Menu_2::Execute(std::vector<Menu*> vec_menus){
+    int selected=selection;
+    if(selected==-1){this->Deploy();}
+    if(selected==1){std::cout<<"Say Hello"<<std::endl;selection=-1;}
+    if(selected==2){std::cout<<"Say Bye"<<std::endl;selection=-1;}
+    this->Execute(vec_menus);
+}

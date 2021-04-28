@@ -1,5 +1,7 @@
 #include<iostream>
 #include<vector>
+#include <stdlib.h>
+#include<algorithm>
 
 #ifndef TASK_H
 #define TASK_H
@@ -14,11 +16,12 @@ class Task {
     public:
     //Constructors.
     Task()=default;
-    Task(std::string date,std::string assignment, int id) : Date{date},Assignment{assignment},ID{id}{}
+    Task(std::string date,std::string assignment) : Date{date},Assignment{assignment}{}
     //Setters.
     void Set_Date(std::string date){Date=date;}
     void Set_Assignment(std::string assignment){Assignment=assignment;}
     virtual void Set_ID(int id)=0;
+    virtual void Set_Task_ID(int id)=0;
 
     void Tick(){Completed=!Completed;}
     void Complete(){Completed=true;}
@@ -46,18 +49,33 @@ class Task {
 class MainTask: public Task{
     protected:
     std::vector<Task*> SubTasks;
-    int Event_ID;
+    int Event_ID{};
+
 
     public:
+    static std::vector<int> MainTask_IDs;
     //Constructors.
     MainTask()=default;
-    MainTask(std::string date,std::string assignment, int id, int e_id): Task(date,assignment,id), Event_ID(e_id){}
+    MainTask(std::string date,std::string assignment,int id,int ev_id): Task(date,assignment){
+        ID=id;
+        Event_ID=ev_id;
+    }
+    MainTask(std::string date,std::string assignment): Task(date,assignment){
+        int random_id=rand()%1000+1;
+        while(std::find(MainTask_IDs.begin(),MainTask_IDs.end(),random_id)!=MainTask_IDs.end()){
+            random_id=rand()%1000+1;
+        }
+        MainTask_IDs.emplace_back(random_id);
+        ID=random_id;
+    }
 
 
     void Add_SubTask(Task* subtask);
 
     void Set_ID(int id){ID=id;}
     void Set_eID(int id){Event_ID=id;};
+    void Set_Task_ID(int id){};
+
 
     void print(Task &task);
 
@@ -80,17 +98,29 @@ class MainTask: public Task{
 //Class declaration for Sub Tasks, inherited from Task.
 class SubTask : public Task {
     protected:
-    int SubTask_ID;
+    int Task_ID{};
+
 
     public:
+    static std::vector<int> SubTask_IDs;
     //Constructors.
     SubTask()=default;
-    SubTask(std::string date,std::string assignment, int id) : Task(date,assignment,id){}
-    SubTask(std::string date,std::string assignment, int id, int sub_id) : Task(date,assignment,id){
-        SubTask_ID=sub_id;
+    SubTask(std::string date,std::string assignment,int id,int t_id) : Task(date,assignment){
+        ID=id;
+        Task_ID=t_id;
     }
+    SubTask(std::string date,std::string assignment) : Task(date,assignment){
+        int random_id=rand()%1000+1;
+        while(std::find(SubTask_IDs.begin(),SubTask_IDs.end(),random_id)!=SubTask_IDs.end()){
+            random_id=rand()%1000+1;
+        }
+        SubTask_IDs.emplace_back(random_id);
+        ID=random_id;
+    }
+    int Get_T_ID(){return Task_ID;}
 
     void Set_ID(int id){ID=id;}
+    void Set_Task_ID(int id){Task_ID=id;}
 
     void print(Task &task);
 

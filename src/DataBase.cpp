@@ -86,7 +86,7 @@ Records select_stmt(const char* stmt, sqlite3* db){
     std::cerr << "Error in select statement " << stmt << "[" << errmsg << "]\n";
     }
     else {
-    std::cerr<< records.size() << " records returned.\n";
+    //std::cerr<< records.size() << " records returned.\n";
     }
 
     return records;
