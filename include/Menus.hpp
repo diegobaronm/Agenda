@@ -29,7 +29,7 @@ class Menu_1 : public Menu {
     public:
     Menu_1(){
         Menu_id=1;
-        options={"Show full agenda.","Select Event.","Create Event.","Go Back"};
+        options={"Show Full Agenda.","Add Event.","Select Event.","Save and Finish."};
     }
     void Deploy(){selection=HelperMenu(options);}
     void Execute(std::vector<Menu*> vec_menus);
@@ -39,7 +39,27 @@ class Menu_2 : public Menu {
     public:
     Menu_2(){
         Menu_id=2;
-        options={"Say Hello","Say Bye","Go Back"};
+        options={"Show Full Event.","Change Event.","Add Task.","Select Task.","Go Back."};
+    }
+    void Deploy(){selection=HelperMenu(options);}
+    void Execute(std::vector<Menu*> vec_menus);
+};
+
+class Menu_3 : public Menu {
+    public:
+    Menu_3(){
+        Menu_id=3;
+        options={"Show Full Task.","Change Task.","Add SubTask.","Select SubTask.","Complete.","Go Back."};
+    }
+    void Deploy(){selection=HelperMenu(options);}
+    void Execute(std::vector<Menu*> vec_menus);
+};
+
+class Menu_4 : public Menu {
+    public:
+    Menu_4(){
+        Menu_id=4;
+        options={"Show Full SubTask.","Change SubTask.","Complete.","Go Back."};
     }
     void Deploy(){selection=HelperMenu(options);}
     void Execute(std::vector<Menu*> vec_menus);

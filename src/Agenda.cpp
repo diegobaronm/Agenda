@@ -133,9 +133,13 @@ int main(){
 
     Menu_1 m1;
     Menu_2 m2;
+    Menu_3 m3;
+    Menu_4 m4;
 
     Menus.push_back(&m1);
     Menus.push_back(&m2);
+    Menus.push_back(&m3);
+    Menus.push_back(&m4);
 
     m1.Execute(Menus);
 

@@ -32,12 +32,13 @@ void Menu_1::Execute(std::vector<Menu*> vec_menus){
             std::cout<<i<<std::endl;
         }
     }
-    if(selected==2){
+    if(selected==2){std::cout<<"Adding Event...."<<std::endl;selection=-1;}
 
-        vec_menus.at(1)->Execute(vec_menus);
+    if(selected==3){std::cout<<"Selecting Event...."<<std::endl;selection=-1;
+        vec_menus.at(1)->Execute(vec_menus);}
 
-    }
-    if(selected==3){std::cout<<"Say Bye"<<std::endl;selection=-1;}
+    if(selected==4){std::cout<<"Saving and finishing...."<<std::endl;selection=-1;}
+
     this->Execute(vec_menus);
 }
 
@@ -45,7 +46,37 @@ void Menu_1::Execute(std::vector<Menu*> vec_menus){
 void Menu_2::Execute(std::vector<Menu*> vec_menus){
     int selected=selection;
     if(selected==-1){this->Deploy();}
-    if(selected==1){std::cout<<"Say Hello"<<std::endl;selection=-1;}
-    if(selected==2){std::cout<<"Say Bye"<<std::endl;selection=-1;}
+    if(selected==1){std::cout<<"Showing full event..."<<std::endl;selection=-1;}
+    if(selected==2){std::cout<<"Changing event...."<<std::endl;selection=-1;}
+    if(selected==3){std::cout<<"Adding task..."<<std::endl;selection=-1;}
+    if(selected==4){std::cout<<"Selecting task...."<<std::endl;selection=-1;
+    vec_menus.at(2)->Execute(vec_menus);}
+    if(selected==5){std::cout<<"Going back...."<<std::endl;selection=-1;
+    vec_menus.at(0)->Execute(vec_menus);}
+    this->Execute(vec_menus);
+}
+
+void Menu_3::Execute(std::vector<Menu*> vec_menus){
+    int selected=selection;
+    if(selected==-1){this->Deploy();}
+    if(selected==1){std::cout<<"Showing full task..."<<std::endl;selection=-1;}
+    if(selected==2){std::cout<<"Changing task...."<<std::endl;selection=-1;}
+    if(selected==3){std::cout<<"Adding subtask..."<<std::endl;selection=-1;}
+    if(selected==4){std::cout<<"Selecting subtask...."<<std::endl;selection=-1;
+    vec_menus.at(3)->Execute(vec_menus);}
+    if(selected==5){std::cout<<"Completing..."<<std::endl;selection=-1;}
+    if(selected==6){std::cout<<"Going back...."<<std::endl;selection=-1;
+    vec_menus.at(1)->Execute(vec_menus);}
+    this->Execute(vec_menus);
+}
+
+void Menu_4::Execute(std::vector<Menu*> vec_menus){
+    int selected=selection;
+    if(selected==-1){this->Deploy();}
+    if(selected==1){std::cout<<"Showing full subtask..."<<std::endl;selection=-1;}
+    if(selected==2){std::cout<<"Changing subtask...."<<std::endl;selection=-1;}
+    if(selected==3){std::cout<<"Completing..."<<std::endl;selection=-1;}
+    if(selected==4){std::cout<<"Going back...."<<std::endl;selection=-1;
+    vec_menus.at(2)->Execute(vec_menus);}
     this->Execute(vec_menus);
 }
