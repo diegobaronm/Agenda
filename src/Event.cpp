@@ -19,6 +19,21 @@ std::ostream & operator<<(std::ostream &os, const Event &event){
     return os;
 }
 
+std::istream & operator>>(std::istream &is, Event& event){
+
+    std::cin.ignore();
+    std::cout<<"Enter date: ";
+    std::string date;
+    std::getline(is,date);
+    event.Set_Date(date);
+    std::cout<<"Enter comment: ";
+    std::string description;
+    std::getline(is,description);
+    event.Set_Comment(description);
+
+    return is;
+}
+
 std::string Event::Generate_SQL_Query(){
     std::string query{"INSERT INTO Events VALUES("};
     query = query+std::to_string(Event_ID)+","+"'"+Date+"'"+","+"'"+Comment+"');";

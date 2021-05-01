@@ -59,6 +59,7 @@ class MainTask: public Task{
     MainTask(std::string date,std::string assignment,int id,int ev_id): Task(date,assignment){
         ID=id;
         Event_ID=ev_id;
+        MainTask_IDs.emplace_back(id);
     }
     MainTask(std::string date,std::string assignment): Task(date,assignment){
         int random_id=rand()%1000+1;
@@ -108,6 +109,7 @@ class SubTask : public Task {
     SubTask(std::string date,std::string assignment,int id,int t_id) : Task(date,assignment){
         ID=id;
         Task_ID=t_id;
+        SubTask_IDs.emplace_back(id);
     }
     SubTask(std::string date,std::string assignment) : Task(date,assignment){
         int random_id=rand()%1000+1;

@@ -10,6 +10,7 @@
 // Class declaration to store events.
 class Event{
     friend std::ostream & operator<<(std::ostream &os, const Event &event);
+    friend std::istream & operator>>(std::istream &is, Event& event);
 
     private:
     std::string Date{"Default"};
@@ -21,8 +22,16 @@ class Event{
     public:
     static std::vector<int> Event_IDs;
     //Constructors.
-    Event()=default;
-    Event(std::string date,std::string comment,int id) : Date{date},Comment{comment},Event_ID{id}{}
+    Event(){
+        int random_id=rand()%1000+1;
+        while(std::find(Event_IDs.begin(),Event_IDs.end(),random_id)!=Event_IDs.end()){
+            random_id=rand()%1000+1;
+        }
+        Event_IDs.emplace_back(random_id);
+        Event_ID=random_id;
+    }
+    Event(std::string date,std::string comment,int id) : Date{date},Comment{comment},Event_ID{id}{
+        Event_IDs.emplace_back(id);}
     Event(std::string date,std::string comment) : Date{date},Comment{comment}{
         int random_id=rand()%1000+1;
         while(std::find(Event_IDs.begin(),Event_IDs.end(),random_id)!=Event_IDs.end()){
