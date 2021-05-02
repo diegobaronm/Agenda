@@ -16,11 +16,12 @@ class Event{
     std::string Date{"Default"};
     std::string Comment{"Default_Comment"};
     int Event_ID;
-    std::vector<Task*> Tasks;
+
 
 
     public:
     static std::vector<int> Event_IDs;
+    std::vector<Task*> Tasks;
     //Constructors.
     Event(){
         int random_id=rand()%1000+1;
@@ -49,9 +50,10 @@ class Event{
     int Get_ID(){return Event_ID;}
 
     void Add_Task(MainTask* task);
+    void Remove_Task(int task);
     //SQL related methods.
     std::string Generate_SQL_Query();
-    std::vector<Event> Fill(std::vector<Event> &E,std::string database);
+    friend std::vector<Event> Fill(std::vector<Event> &E,std::string database);
 };
 
 #endif

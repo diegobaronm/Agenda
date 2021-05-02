@@ -3,6 +3,27 @@
 #include<sqlite3.h>
 // MainTask class functionality
 
+std::istream& operator>>(std::istream& is, MainTask& mt){
+    std::cin.ignore();
+    std::cout<<"Enter date: ";
+    std::string date;
+    std::getline(is,date);
+    mt.Set_Date(date);
+    std::cout<<"Enter assignment: ";
+    std::string description;
+    std::getline(is,description);
+    mt.Set_Assignment(description);
+
+    return is;
+}
+
+void MainTask::Complete(){
+    Completed=true;
+    for(auto& st : SubTasks ){
+        st->Complete();
+    }
+}
+
 void MainTask::Add_SubTask(Task* subtask){
     subtask->Set_Task_ID(ID);
     SubTasks.push_back(subtask);
@@ -29,7 +50,7 @@ std::string MainTask::Generate_SQL_Query(){
     return query;
 }
 
-std::vector<MainTask> MainTask::Fill(std::vector<MainTask> &MT,std::string database){
+std::vector<MainTask> Fill(std::vector<MainTask> &MT,std::string database){
     sqlite3 *db;
     std::string query = "SELECT * FROM MainTasks";
 
@@ -49,6 +70,21 @@ std::vector<MainTask> MainTask::Fill(std::vector<MainTask> &MT,std::string datab
 }
 
 // SubTask functionality
+std::istream& operator>>(std::istream& is, SubTask& st){
+    std::cin.ignore();
+    std::cout<<"Enter date: ";
+    std::string date;
+    std::getline(is,date);
+    st.Set_Date(date);
+    std::cout<<"Enter assignment: ";
+    std::string description;
+    std::getline(is,description);
+    st.Set_Assignment(description);
+
+    return is;
+}
+
+
 void SubTask::print(Task &task){
         std::cout<<"- [ID:"<<task.Get_ID()<<"] "<<task.Get_Assignment()<<"  "<<"Due Date: "<<task.Get_Date();
         if (task.Get_Completed()){std::cout<<"  [Done!]"<<std::endl;}
@@ -66,7 +102,7 @@ std::string SubTask::Generate_SQL_Query(){
     return query;
 }
 
-std::vector<SubTask> SubTask::Fill(std::vector<SubTask> &ST,std::string database){
+std::vector<SubTask> Fill(std::vector<SubTask> &ST,std::string database){
     sqlite3 *db;
     std::string query = "SELECT * FROM SubTasks";
 

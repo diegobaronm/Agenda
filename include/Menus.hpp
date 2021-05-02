@@ -5,6 +5,9 @@
 #include"Task.hpp"
 
 int HelperMenu(std::vector<std::string> options);
+void Organize_Tasks(std::vector<MainTask> &MTs,std::vector<SubTask> &STs);
+void Organize_Events(std::vector<Event> &Es,std::vector<MainTask> &MTs);
+void Organize();
 
 class Menu{
     protected:

@@ -24,7 +24,7 @@ class Task {
     virtual void Set_Task_ID(int id)=0;
 
     void Tick(){Completed=!Completed;}
-    void Complete(){Completed=true;}
+    virtual void Complete()=0;
     //Getters.
     std::string Get_Date(){return Date;}
     std::string Get_Assignment(){return Assignment;}
@@ -47,15 +47,24 @@ class Task {
 #define MAINTASK_H
 //Class declaration for Main Tasks, inherited from Task.
 class MainTask: public Task{
+    friend std::istream& operator>>(std::istream& is, MainTask& mt);
+
     protected:
-    std::vector<Task*> SubTasks;
     int Event_ID{};
 
 
     public:
+    std::vector<Task*> SubTasks;
     static std::vector<int> MainTask_IDs;
     //Constructors.
-    MainTask()=default;
+    MainTask(){
+        int random_id=rand()%1000+1;
+        while(std::find(MainTask_IDs.begin(),MainTask_IDs.end(),random_id)!=MainTask_IDs.end()){
+            random_id=rand()%1000+1;
+        }
+        MainTask_IDs.emplace_back(random_id);
+        ID=random_id;
+    };
     MainTask(std::string date,std::string assignment,int id,int ev_id): Task(date,assignment){
         ID=id;
         Event_ID=ev_id;
@@ -70,6 +79,7 @@ class MainTask: public Task{
         ID=random_id;
     }
 
+    void Complete();
 
     void Add_SubTask(Task* subtask);
 
@@ -86,7 +96,7 @@ class MainTask: public Task{
 
     std::string getType() const{return "MainTask";}
 
-    std::vector<MainTask> Fill(std::vector<MainTask> &MT,std::string database);
+    friend std::vector<MainTask> Fill(std::vector<MainTask> &MT,std::string database);
 
     int Get_eID(){return Event_ID;}
 
@@ -98,6 +108,7 @@ class MainTask: public Task{
 #define SUBTASK_H
 //Class declaration for Sub Tasks, inherited from Task.
 class SubTask : public Task {
+    friend std::istream& operator>>(std::istream& is, SubTask& st);
     protected:
     int Task_ID{};
 
@@ -105,7 +116,14 @@ class SubTask : public Task {
     public:
     static std::vector<int> SubTask_IDs;
     //Constructors.
-    SubTask()=default;
+    SubTask(){
+        int random_id=rand()%1000+1;
+        while(std::find(SubTask_IDs.begin(),SubTask_IDs.end(),random_id)!=SubTask_IDs.end()){
+            random_id=rand()%1000+1;
+        }
+        SubTask_IDs.emplace_back(random_id);
+        ID=random_id;
+    }
     SubTask(std::string date,std::string assignment,int id,int t_id) : Task(date,assignment){
         ID=id;
         Task_ID=t_id;
@@ -119,6 +137,9 @@ class SubTask : public Task {
         SubTask_IDs.emplace_back(random_id);
         ID=random_id;
     }
+
+    void Complete(){Completed=true;}
+
     int Get_T_ID(){return Task_ID;}
 
     void Set_ID(int id){ID=id;}
@@ -132,7 +153,7 @@ class SubTask : public Task {
 
     std::string getType() const{return "SubTask";}
 
-    std::vector<SubTask> Fill(std::vector<SubTask> &ST,std::string database);
+    friend std::vector<SubTask> Fill(std::vector<SubTask> &ST,std::string database);
 
 };
 

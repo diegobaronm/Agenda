@@ -67,28 +67,6 @@ std::string Select_Agenda(bool& new_agenda){
     }
 }
 
-void Organize_Tasks(std::vector<MainTask> &MTs,std::vector<SubTask> &STs){
-    for(auto& p : MTs){
-        for(auto& q : STs){
-            if(q.Get_T_ID()==p.Get_ID()){
-                p.Add_SubTask(&q);
-            }
-        }
-    }
-}
-
-void Organize_Events(std::vector<Event> &Es,std::vector<MainTask> &MTs){
-    for(auto& p : Es){
-        for(auto& q : MTs){
-            if(q.Get_eID()==p.Get_ID()){
-                p.Add_Task(&q);
-            }
-        }
-    }
-}
-
-
-
 //Defintion of static variables containing objects IDs.
 std::vector<int> Event::Event_IDs;
 std::vector<int> MainTask::MainTask_IDs;
@@ -99,12 +77,6 @@ std::vector<MainTask> Menu::All_MT;
 std::vector<SubTask> Menu::All_ST;
 
 int main(){
-
-    //Dummy objects used to fill the vector with the objects from the database
-    MainTask mt;
-    SubTask st;
-    Event e;
-
     // Flag to know if new agend needs to be created.
     bool new_agenda{false};
 
@@ -118,16 +90,15 @@ int main(){
     }
 
     // Fill vectors of objects.
-    std::vector<Event> Es=e.Fill(Es,db);
-    std::vector<MainTask> MTs=mt.Fill(MTs,db);
-    std::vector<SubTask> STs=st.Fill(STs,db);
+    std::vector<Event> Es;
+    Menu::All_E=Fill(Es,db);
+    std::vector<MainTask> MTs;
+    Menu::All_MT=Fill(MTs,db);
+    std::vector<SubTask> STs;
+    Menu::All_ST=Fill(STs,db);
     //Organize hierarchy of the agenda.
-    Organize_Tasks(MTs,STs);
-    Organize_Events(Es,MTs);
+    Organize();
 
-    Menu::All_E=Es;
-    Menu::All_MT=MTs;
-    Menu::All_ST=STs;
 
     std::vector<Menu*> Menus;
 
@@ -161,13 +132,16 @@ int main(){
         task1.Add_SubTask(&sub_task2);
         task2.Add_SubTask(&sub_task3);
 
-        Execute_Query(e1.Generate_SQL_Query(),db);
+        std::cout<<e1;
+        std::cout<<e2;
+
+        /*Execute_Query(e1.Generate_SQL_Query(),db);
         Execute_Query(e2.Generate_SQL_Query(),db);
         Execute_Query(task1.Generate_SQL_Query(),db);
         Execute_Query(task2.Generate_SQL_Query(),db);
         Execute_Query(sub_task1.Generate_SQL_Query(),db);
         Execute_Query(sub_task2.Generate_SQL_Query(),db);
-        Execute_Query(sub_task3.Generate_SQL_Query(),db);
+        Execute_Query(sub_task3.Generate_SQL_Query(),db);*/
     }
     std::cout<<"HELO";
     return 0;

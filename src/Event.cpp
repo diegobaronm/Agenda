@@ -7,6 +7,15 @@ void Event::Add_Task(MainTask* task){
     Tasks.push_back(task);
 }
 
+void Event::Remove_Task(int id){
+    auto it=Tasks.begin();
+    for(auto it=Tasks.begin();it!=Tasks.end();it++){
+        if((*it)->Get_ID()==id){break; }
+    }
+    Tasks.erase(it);
+
+}
+
 std::ostream & operator<<(std::ostream &os, const Event &event){
     os<<"-----------------> Event"<<" [ID:"<<event.Event_ID<<"] <----------------------" <<std::endl<<std::endl<<"Date: "<<event.Date<<std::endl<<"Comment: "<<event.Comment<<std::endl<<std::endl;
     if (event.Tasks.empty()){os<<"No tasks!"<<std::endl;}
@@ -40,7 +49,7 @@ std::string Event::Generate_SQL_Query(){
     return query;
 }
 
-std::vector<Event> Event::Fill(std::vector<Event> &E,std::string database){
+std::vector<Event> Fill(std::vector<Event> &E,std::string database){
     sqlite3 *db;
     std::string query = "SELECT * FROM Events";
 
