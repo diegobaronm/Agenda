@@ -43,6 +43,66 @@ int valid_ID(std::vector<int> &ids){
 
 }
 
+namespace fs=std::filesystem;
+
+std::string Select_Agenda(bool& new_agenda){
+    std::string cwd = fs::current_path();
+    std::map<int,std::string> agenda;
+    int c{};
+
+    for(auto& p: fs::recursive_directory_iterator(cwd)){
+        if (p.path().extension()==".db"){
+            c++;
+            agenda.insert({c,p.path().filename()});
+        }
+    }
+
+    if(agenda.empty()){
+        std::cout<<"No available agendas, insert new agenda name:"<<std::endl;
+        std::string new_agenda_name;
+        std::cin>>new_agenda_name;
+        while(std::cin.fail() || new_agenda_name==""){
+            std::cin.clear();
+            std::cin.ignore(1000,'\n');
+            std::cout<<"Enter a valid agenda name!"<<std::endl;
+            std::cin>>new_agenda_name;
+        }
+        new_agenda=true;
+        return new_agenda_name+".db";
+    } else {
+        std::cout<<"The avaliable Agendas are:"<<std::endl;
+        std::cout<<"0.  Create agenda"<<std::endl;
+        for(auto& ag :agenda){
+            std::cout<<std::to_string(ag.first)<<". "<<ag.second<<std::endl;
+        }
+        int selected_key{};
+        std::cin>>selected_key;
+        while(std::cin.fail() || selected_key>agenda.size() || selected_key < 0){
+            std::cin.clear();
+            std::cin.ignore(1000,'\n');
+            std::cout<<"Select existing agenda number!"<<std::endl;
+            std::cin>>selected_key;
+        }
+        if(!selected_key){
+            std::string new_agenda_name;
+            std::cout<<"New agenda name:"<<std::endl;
+            std::cin>>new_agenda_name;
+            while(std::cin.fail() || new_agenda_name==""){
+                std::cin.clear();
+                std::cin.ignore(1000,'\n');
+                std::cout<<"Enter a valid agenda name!"<<std::endl;
+                std::cin>>new_agenda_name;
+            }
+            new_agenda=true;
+            return new_agenda_name+".db";
+        } else {
+            auto selected = agenda.find(selected_key);
+            return selected->second;
+        }
+    }
+}
+
+
 Event* retrieve_event(int id){
     for(auto& event : Menu::All_E){
         if(event.Get_ID()==id){
@@ -130,6 +190,13 @@ static int ev_id{};
 //Menu 1
 void Menu_2::Execute(std::vector<Menu*> vec_menus){
     int selected=selection;
+    /*std::cout<<"SIZE OF MTs: "<<Menu::All_MT.size()<<std::endl;
+    std::cout<<"POINTER TO SELECTED_EVENT: "<<selected_event<<std::endl;
+    std::cout<<"POINTERS TO MAIN TASKS IN SELECTED EVENT: "<<std::endl;
+    if(selected_event){
+    for(auto &p : selected_event->Tasks){std::cout<<p<<std::endl;}}
+    std::cout<<"POINTERS IN SELECTED Menu::All_MT: "<<std::endl;
+    for(auto &p : Menu::All_MT){std::cout<<&p<<std::endl;}*/
     if(!ev_selected){
         ev_id=valid_ID(Event::Event_IDs);
         selected_event=retrieve_event(ev_id);
@@ -146,9 +213,10 @@ void Menu_2::Execute(std::vector<Menu*> vec_menus){
         selection=-1;
     }
     if(selected==3){std::cout<<"Adding task..."<<std::endl;
+        Menu::All_MT.reserve(Menu::All_MT.size()+5);
         MainTask new_maintask;
         std::cin>>new_maintask;
-        Menu::All_MT.push_back(new_maintask);
+        Menu::All_MT.emplace_back(new_maintask);
         selected_event->Add_Task(&(Menu::All_MT.at(Menu::All_MT.size()-1)));
         selection=-1;
     }
@@ -189,10 +257,8 @@ void Menu_3::Execute(std::vector<Menu*> vec_menus){
     if(selected==3){std::cout<<"Adding subtask..."<<std::endl;
         SubTask new_subtask;
         std::cin>>new_subtask;
-        Menu::All_ST.push_back(new_subtask);
+        Menu::All_ST.emplace_back(new_subtask);
         selected_task->Add_SubTask(&(Menu::All_ST.at(Menu::All_ST.size()-1)));
-        selected_event->Remove_Task(ev_id);
-        selected_event->Add_Task(selected_task);
         selection=-1;
     }
     if(selected==4){std::cout<<"Selecting subtask...."<<std::endl;selection=-1;
@@ -204,8 +270,6 @@ void Menu_3::Execute(std::vector<Menu*> vec_menus){
     }
     if(selected==5){std::cout<<"Completing..."<<std::endl;
         selected_task->Complete();
-        selected_event->Remove_Task(ev_id);
-        selected_event->Add_Task(selected_task);
         selection=-1;
     }
     if(selected==6){std::cout<<"Going back...."<<std::endl;selection=-1;
@@ -237,7 +301,6 @@ void Menu_4::Execute(std::vector<Menu*> vec_menus){
     }
     if(selected==3){std::cout<<"Completing..."<<std::endl;
         selected_subtask->Complete();
-        Organize();
         selection=-1;
     }
     if(selected==4){std::cout<<"Going back...."<<std::endl;selection=-1;

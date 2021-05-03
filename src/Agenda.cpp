@@ -1,71 +1,8 @@
 #include<string>
-#include<filesystem>
-#include<map>
-
 #include"Task.hpp"
 #include"Event.hpp"
 #include"DataBase.hpp"
 #include"Menus.hpp"
-
-
-namespace fs=std::filesystem;
-
-std::string Select_Agenda(bool& new_agenda){
-    std::string cwd = fs::current_path();
-    std::map<int,std::string> agenda;
-    int c{};
-
-    for(auto& p: fs::recursive_directory_iterator(cwd)){
-        if (p.path().extension()==".db"){
-            c++;
-            agenda.insert({c,p.path().filename()});
-        }
-    }
-
-    if(agenda.empty()){
-        std::cout<<"No available agendas, insert new agenda name:"<<std::endl;
-        std::string new_agenda_name;
-        std::cin>>new_agenda_name;
-        while(std::cin.fail() || new_agenda_name==""){
-            std::cin.clear();
-            std::cin.ignore(1000,'\n');
-            std::cout<<"Enter a valid agenda name!"<<std::endl;
-            std::cin>>new_agenda_name;
-        }
-        new_agenda=true;
-        return new_agenda_name+".db";
-    } else {
-        std::cout<<"The avaliable Agendas are:"<<std::endl;
-        std::cout<<"0.  Create agenda"<<std::endl;
-        for(auto& ag :agenda){
-            std::cout<<std::to_string(ag.first)<<". "<<ag.second<<std::endl;
-        }
-        int selected_key{};
-        std::cin>>selected_key;
-        while(std::cin.fail() || selected_key>agenda.size() || selected_key < 0){
-            std::cin.clear();
-            std::cin.ignore(1000,'\n');
-            std::cout<<"Select existing agenda number!"<<std::endl;
-            std::cin>>selected_key;
-        }
-        if(!selected_key){
-            std::string new_agenda_name;
-            std::cout<<"New agenda name:"<<std::endl;
-            std::cin>>new_agenda_name;
-            while(std::cin.fail() || new_agenda_name==""){
-                std::cin.clear();
-                std::cin.ignore(1000,'\n');
-                std::cout<<"Enter a valid agenda name!"<<std::endl;
-                std::cin>>new_agenda_name;
-            }
-            new_agenda=true;
-            return new_agenda_name+".db";
-        } else {
-            auto selected = agenda.find(selected_key);
-            return selected->second;
-        }
-    }
-}
 
 //Defintion of static variables containing objects IDs.
 std::vector<int> Event::Event_IDs;
@@ -75,6 +12,7 @@ std::vector<int> SubTask::SubTask_IDs;
 std::vector<Event> Menu::All_E;
 std::vector<MainTask> Menu::All_MT;
 std::vector<SubTask> Menu::All_ST;
+
 
 int main(){
     // Flag to know if new agend needs to be created.
@@ -92,13 +30,15 @@ int main(){
     // Fill vectors of objects.
     std::vector<Event> Es;
     Menu::All_E=Fill(Es,db);
+    Menu::All_E.reserve(Menu::All_E.size()+100);
     std::vector<MainTask> MTs;
     Menu::All_MT=Fill(MTs,db);
+    Menu::All_MT.reserve(Menu::All_MT.size()+100);
     std::vector<SubTask> STs;
     Menu::All_ST=Fill(STs,db);
+    Menu::All_ST.reserve(Menu::All_ST.size()+100);
     //Organize hierarchy of the agenda.
     Organize();
-
 
     std::vector<Menu*> Menus;
 
@@ -143,6 +83,5 @@ int main(){
         Execute_Query(sub_task2.Generate_SQL_Query(),db);
         Execute_Query(sub_task3.Generate_SQL_Query(),db);*/
     }
-    std::cout<<"HELO";
     return 0;
 }

@@ -31,7 +31,7 @@ class Task {
     bool Get_Completed(){return Completed;}
     int Get_ID(){return ID;}
 
-    virtual void print(Task &task)=0;
+    virtual void print()=0;
 
     //Pure virtual function related with SQL querys.
     virtual std::string Generate_SQL_Query()=0;
@@ -88,9 +88,9 @@ class MainTask: public Task{
     void Set_Task_ID(int id){};
 
 
-    void print(Task &task);
+    void print() override;
 
-    friend std::ostream & operator<<(std::ostream &os, MainTask &task);
+    friend std::ostream & operator<<(std::ostream &os, Task &task);
 
     std::string Generate_SQL_Query();
 
@@ -145,7 +145,7 @@ class SubTask : public Task {
     void Set_ID(int id){ID=id;}
     void Set_Task_ID(int id){Task_ID=id;}
 
-    void print(Task &task);
+    void print() override;
 
     friend std::ostream & operator<<(std::ostream &os, SubTask &task);
 

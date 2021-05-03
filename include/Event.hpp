@@ -21,7 +21,7 @@ class Event{
 
     public:
     static std::vector<int> Event_IDs;
-    std::vector<Task*> Tasks;
+    std::vector<MainTask*> Tasks;
     //Constructors.
     Event(){
         int random_id=rand()%1000+1;

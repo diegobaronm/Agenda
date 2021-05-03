@@ -4,7 +4,7 @@
 
 void Event::Add_Task(MainTask* task){
     task->Set_eID(Event_ID);
-    Tasks.push_back(task);
+    Tasks.emplace_back(task);
 }
 
 void Event::Remove_Task(int id){
@@ -21,8 +21,8 @@ std::ostream & operator<<(std::ostream &os, const Event &event){
     if (event.Tasks.empty()){os<<"No tasks!"<<std::endl;}
     else {
         std::cout<<"Tasks:"<<std::endl;
-        for (auto it = event.Tasks.begin()   ; it != event.Tasks.end(); it++){
-            (*it)->print(**it);
+        for(size_t i=0; i<event.Tasks.size();i++){
+            event.Tasks.at(i)->print();
         }
     }
     return os;

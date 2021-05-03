@@ -1,10 +1,13 @@
 #include<vector>
 #include<string>
+#include<filesystem>
+#include<map>
 #include<iostream>
 #include"Event.hpp"
 #include"Task.hpp"
 
 int HelperMenu(std::vector<std::string> options);
+std::string Select_Agenda(bool& new_agenda);
 void Organize_Tasks(std::vector<MainTask> &MTs,std::vector<SubTask> &STs);
 void Organize_Events(std::vector<Event> &Es,std::vector<MainTask> &MTs);
 void Organize();
@@ -19,6 +22,7 @@ class Menu{
     static std::vector<Event> All_E;
     static std::vector<MainTask> All_MT;
     static std::vector<SubTask> All_ST;
+
 
     Menu()=default;
     Menu(std::vector<std::string> opt) : options{opt}{}

@@ -26,21 +26,21 @@ void MainTask::Complete(){
 
 void MainTask::Add_SubTask(Task* subtask){
     subtask->Set_Task_ID(ID);
-    SubTasks.push_back(subtask);
+    SubTasks.emplace_back(subtask);
 }
 
-void MainTask::print(Task &task){
-    std::cout<<"* [ID:"<<task.Get_ID()<<"] "<<task.Get_Assignment()<<"  "<<"Due Date: "<<task.Get_Date();
-    if (task.Get_Completed()){std::cout<<"  [Done!]"<<std::endl;}
+void MainTask::print(){
+    std::cout<<"* [ID:"<<this->Get_ID()<<"] "<<this->Get_Assignment()<<"  "<<"Due Date: "<<this->Get_Date();
+    if (this->Get_Completed()){std::cout<<"  [Done!]"<<std::endl;}
     else {std::cout<<"  [To Do!]"<<std::endl;}
     for(auto it=SubTasks.begin();it!=SubTasks.end();it++){
-        std::cout<<"    ";
-        (*it)->print(**it);
+        std::cout<<"   ";
+        (*it)->print();
     }
 }
 
-std::ostream & operator<<(std::ostream &os, MainTask &task){
-    task.print(task);
+std::ostream & operator<<(std::ostream &os, Task &task){
+    task.print();
     return os;
 }
 
@@ -85,14 +85,14 @@ std::istream& operator>>(std::istream& is, SubTask& st){
 }
 
 
-void SubTask::print(Task &task){
-        std::cout<<"- [ID:"<<task.Get_ID()<<"] "<<task.Get_Assignment()<<"  "<<"Due Date: "<<task.Get_Date();
-        if (task.Get_Completed()){std::cout<<"  [Done!]"<<std::endl;}
+void SubTask::print(){
+        std::cout<<"- [ID:"<<this->Get_ID()<<"] "<<this->Get_Assignment()<<"  "<<"Due Date: "<<this->Get_Date();
+        if (this->Get_Completed()){std::cout<<"  [Done!]"<<std::endl;}
         else {std::cout<<"  [To Do!]"<<std::endl;}
     }
 
 std::ostream & operator<<(std::ostream &os, SubTask &task){
-    task.print(task);
+    task.print();
     return os;
 }
 
