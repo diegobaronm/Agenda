@@ -154,11 +154,23 @@ void Organize(){
     Organize_Tasks(Menu::All_MT,Menu::All_ST);
     Organize_Events(Menu::All_E,Menu::All_MT);
 }
+static bool ev_selected{false};
+static Event* selected_event{nullptr};
+static int ev_id{};
+
+static bool task_selected{false};
+static MainTask* selected_task{nullptr};
+static int task_id{};
+
+static bool subtask_selected{false};
+static SubTask* selected_subtask{nullptr};
+static int subtask_id{};
 //Functionalities of the Menus in the program
 
 //Menu 1
 void Menu_1::Execute(std::vector<Menu*> vec_menus){
     int selected=selection;
+    //std::cout<<selected<<std::endl;
     if(selected==-1){this->Deploy();}
     if(selected==1){
         std::cout<<"Showing full agenda: "<<std::endl;selection=-1;
@@ -179,14 +191,18 @@ void Menu_1::Execute(std::vector<Menu*> vec_menus){
         }
         vec_menus.at(1)->Execute(vec_menus);}
 
-    if(selected==4){std::cout<<"Saving and finishing...."<<std::endl;selection=-1;}
-
-    this->Execute(vec_menus);
+    if(selected==4){std::cout<<"Saving and finishing...."<<std::endl;
+        ev_selected=true;
+        task_selected=true;
+        subtask_selected=true;
+        selection=0;
+    }
+    if(selected!=4 & selected!=0){
+        this->Execute(vec_menus);
+    }
 }
 
-static bool ev_selected{false};
-static Event* selected_event{nullptr};
-static int ev_id{};
+
 //Menu 1
 void Menu_2::Execute(std::vector<Menu*> vec_menus){
     int selected=selection;
@@ -231,13 +247,11 @@ void Menu_2::Execute(std::vector<Menu*> vec_menus){
         ev_selected=false;
         selected_event=nullptr;
         vec_menus.at(0)->Execute(vec_menus);
-    }
-    this->Execute(vec_menus);
-}
+        selection=0;
 
-static bool task_selected{false};
-static MainTask* selected_task{nullptr};
-static int task_id{};
+    }
+    if(selected!=5 & selected!=0){this->Execute(vec_menus);}
+}
 
 void Menu_3::Execute(std::vector<Menu*> vec_menus){
     int selected=selection;
@@ -276,13 +290,11 @@ void Menu_3::Execute(std::vector<Menu*> vec_menus){
         task_selected=false;
         selected_task=nullptr;
         vec_menus.at(1)->Execute(vec_menus);
+        selection=0;
     }
-    this->Execute(vec_menus);
+    if(selected!=6 & selected!=0){this->Execute(vec_menus);}
 }
 
-static bool subtask_selected{false};
-static SubTask* selected_subtask{nullptr};
-static int subtask_id{};
 
 void Menu_4::Execute(std::vector<Menu*> vec_menus){
     int selected=selection;
@@ -307,6 +319,7 @@ void Menu_4::Execute(std::vector<Menu*> vec_menus){
         subtask_selected=false;
         selected_subtask=nullptr;
         vec_menus.at(2)->Execute(vec_menus);
+        selection=0 ;
     }
-    this->Execute(vec_menus);
+    if(selected!=4 & selected!=0){this->Execute(vec_menus);}
 }

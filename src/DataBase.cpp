@@ -1,8 +1,7 @@
 #include"DataBase.hpp"
 
-sqlite3 *db;
-
 void CreateDB(std::string database){
+    sqlite3 *db;
 
     char* data = const_cast<char*>(database.c_str());
 
@@ -14,7 +13,7 @@ void CreateDB(std::string database){
     if( rc ) {
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
     } else {
-        fprintf(stderr, "Opened database successfully\n");
+        //fprintf(stderr, "Opened database successfully\n");
     }
     std::string create_table_Event_query =
         "CREATE TABLE Events("
@@ -49,25 +48,24 @@ void CreateDB(std::string database){
 }
 
 void Execute_Query(std::string query,std::string database){
+    sqlite3 *db;
     char* data = const_cast<char*>(database.c_str());
     char* qry = const_cast<char*>(query.c_str());
     int exit = 0;
     char* messaggeError;
 
-    std::cout<<data<<std::endl;
-    std::cout<<query<<std::endl;
+    //std::cout<<data<<std::endl;
+    //std::cout<<query<<std::endl;
 
     exit = sqlite3_open(data, &db);
     exit = sqlite3_exec(db, qry , NULL, 0, &messaggeError);
-
-    //std::cout<<messaggeError<<std::endl;
 
     if (exit != SQLITE_OK) {
         std::cerr << "Error Create Table" << std::endl;
         sqlite3_free(messaggeError);
     }
     else
-        std::cout << "Table created Successfully" << std::endl;
+        //std::cout << "Table created Successfully" << std::endl;
     sqlite3_close(db);
 }
 

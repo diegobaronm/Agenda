@@ -64,7 +64,7 @@ std::vector<MainTask> Fill(std::vector<MainTask> &MT,std::string database){
     std::vector<MainTask> objects;
 
     for (auto& record : records) {
-        objects.push_back(MainTask(record.at(3),record.at(4),std::stoi(record.at(0)),std::stoi(record.at(1))));
+        objects.push_back(MainTask(record.at(3),record.at(4),std::stoi(record.at(0)),std::stoi(record.at(1)),std::stoi(record.at(2))));
     }
     return objects;
 }
@@ -116,7 +116,7 @@ std::vector<SubTask> Fill(std::vector<SubTask> &ST,std::string database){
     std::vector<SubTask> objects;
 
     for (auto& record : records) {
-        objects.push_back(SubTask(record.at(3),record.at(4),std::stoi(record.at(0)),std::stoi(record.at(1))));
+        objects.push_back(SubTask(record.at(3),record.at(4),std::stoi(record.at(0)),std::stoi(record.at(1)),std::stoi(record.at(2))));
     }
     return objects;
 }

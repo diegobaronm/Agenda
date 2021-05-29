@@ -17,6 +17,7 @@ class Task {
     //Constructors.
     Task()=default;
     Task(std::string date,std::string assignment) : Date{date},Assignment{assignment}{}
+    Task(std::string date,std::string assignment, bool completed) : Date{date},Assignment{assignment},Completed{completed}{}
     //Setters.
     void Set_Date(std::string date){Date=date;}
     void Set_Assignment(std::string assignment){Assignment=assignment;}
@@ -65,7 +66,7 @@ class MainTask: public Task{
         MainTask_IDs.emplace_back(random_id);
         ID=random_id;
     };
-    MainTask(std::string date,std::string assignment,int id,int ev_id): Task(date,assignment){
+    MainTask(std::string date,std::string assignment,int id,int ev_id,bool status): Task(date,assignment,status){
         ID=id;
         Event_ID=ev_id;
         MainTask_IDs.emplace_back(id);
@@ -124,7 +125,7 @@ class SubTask : public Task {
         SubTask_IDs.emplace_back(random_id);
         ID=random_id;
     }
-    SubTask(std::string date,std::string assignment,int id,int t_id) : Task(date,assignment){
+    SubTask(std::string date,std::string assignment,int id,int t_id,bool status) : Task(date,assignment,status){
         ID=id;
         Task_ID=t_id;
         SubTask_IDs.emplace_back(id);
